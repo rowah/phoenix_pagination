@@ -22,6 +22,25 @@ defmodule ProductPagination.Catalog do
   end
 
   @doc """
+  Paginates products.
+
+  ## Examples
+
+      iex> paginate_products()
+      %Scrivener.Page{}
+
+      iex> paginate_products(%{page_size: 10})
+      %Scrivener.Page{}
+
+      iex> paginate_products(%{page_size: 10, page: 2})
+      %Scrivener.Page{}
+  """
+
+  def paginate_products(params \\ %{}) do
+    Repo.paginate(Product, params)
+  end
+
+  @doc """
   Gets a single product.
 
   Raises `Ecto.NoResultsError` if the Product does not exist.

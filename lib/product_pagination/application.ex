@@ -10,7 +10,8 @@ defmodule ProductPagination.Application do
     children = [
       ProductPaginationWeb.Telemetry,
       ProductPagination.Repo,
-      {DNSCluster, query: Application.get_env(:product_pagination, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:product_pagination, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: ProductPagination.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: ProductPagination.Finch},

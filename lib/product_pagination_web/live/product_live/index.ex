@@ -5,13 +5,39 @@ defmodule ProductPaginationWeb.ProductLive.Index do
   alias ProductPagination.Catalog.Product
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, stream(socket, :products, Catalog.list_products())}
+  def mount(params, _session, socket) do
+    %{
+      entries: products,
+      total_entries: total_entries,
+      total_pages: total_pages,
+      page_number: page_number
+    } = Catalog.paginate_products(params)
+
+    {:ok,
+     socket
+     |> assign(:products, products)
+     |> assign(:total_entries, total_entries)
+     |> assign(:total_pages, total_pages)
+     |> assign(:page_number, page_number)
+     |> stream(:products, products)}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    %{
+      entries: products,
+      total_entries: total_entries,
+      total_pages: total_pages,
+      page_number: page_number
+    } = Catalog.paginate_products(params)
+
+    {:noreply,
+     socket
+     |> assign(:products, products)
+     |> assign(:total_entries, total_entries)
+     |> assign(:total_pages, total_pages)
+     |> assign(:page_number, page_number)
+     |> apply_action(socket.assigns.live_action, params)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
