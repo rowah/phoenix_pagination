@@ -36,8 +36,13 @@ defmodule ProductPagination.Catalog do
       %Scrivener.Page{}
   """
 
-  def paginate_products(params \\ %{}) do
-    Repo.paginate(Product, params)
+  # def paginate_products(%{}) do
+  #   Repo.paginate(%{})
+  # end
+
+  def paginate_products(params) do
+    Product
+    |> Repo.paginate(params)
   end
 
   @doc """

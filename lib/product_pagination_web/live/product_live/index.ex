@@ -19,7 +19,7 @@ defmodule ProductPaginationWeb.ProductLive.Index do
      |> assign(:total_entries, total_entries)
      |> assign(:total_pages, total_pages)
      |> assign(:page_number, page_number)
-     |> stream(:products, products)}
+     |> stream(:products, products, reset: true)}
   end
 
   @impl true
@@ -73,27 +73,26 @@ defmodule ProductPaginationWeb.ProductLive.Index do
 
   @impl true
   def handle_event("next", _params, socket) do
+    new_page = socket.assigns.page_number + 1
     %{
       entries: products
-      # page_number: page_number
-    } = Catalog.paginate_products(%{page_number: socket.assigns.page_number + 1})
+    } = Catalog.paginate_products(%{page: new_page})
 
     {:noreply,
      socket
-     |> assign(:page_number, socket.assigns.page_number + 1)
-     |> stream(:products, products)}
+     |> assign(:page_number, new_page)
+     |> stream(:products, products, reset: true)}
   end
 
   @impl true
   def handle_event("previous", _params, socket) do
+    new_page = socket.assigns.page_number - 1
     %{entries: products} =
-      Catalog.paginate_products(%{page_number: socket.assigns.page_number - 1})
-
-    socket = socket
+      Catalog.paginate_products(%{page: new_page})
 
     {:noreply,
      socket
-     |> assign(:page_number, socket.assigns.page_number - 1)
-     |> stream(:products, products)}
+     |> assign(:page_number, new_page)
+     |> stream(:products, products, reset: true)}
   end
 end
