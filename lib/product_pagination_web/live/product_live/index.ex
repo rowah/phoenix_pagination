@@ -70,4 +70,30 @@ defmodule ProductPaginationWeb.ProductLive.Index do
 
     {:noreply, stream_delete(socket, :products, product)}
   end
+
+  @impl true
+  def handle_event("next", _params, socket) do
+    %{
+      entries: products
+      # page_number: page_number
+    } = Catalog.paginate_products(%{page_number: socket.assigns.page_number + 1})
+
+    {:noreply,
+     socket
+     |> assign(:page_number, socket.assigns.page_number + 1)
+     |> stream(:products, products)}
+  end
+
+  @impl true
+  def handle_event("previous", _params, socket) do
+    %{entries: products} =
+      Catalog.paginate_products(%{page_number: socket.assigns.page_number - 1})
+
+    socket = socket
+
+    {:noreply,
+     socket
+     |> assign(:page_number, socket.assigns.page_number - 1)
+     |> stream(:products, products)}
+  end
 end

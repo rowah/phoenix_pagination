@@ -32,12 +32,12 @@
   </:action>
 </.table>
 
-<div>
-  <%!-- <div>
+<div class="flex">
+  <div class="cursor-pointer hover:bg-blue-400 hover:text-white" phx-click="previous">
     <%= if @page_number > 1 do %>
-      <div>Previous</div>
+      <div class="p-1">Previous</div>
     <% end %>
-  </div> --%>
+  </div>
   <div class="flex">
     <%= for index <- Enum.to_list(1..@total_pages) do %>
       <%= if index == @page_number do %>
@@ -47,11 +47,11 @@
       <% end %>
     <% end %>
   </div>
-  <%!-- <div>
+  <div class="cursor-pointer hover:bg-blue-400 hover:text-white" phx-click="next">
     <%= if @page_number < @total_pages do %>
-      <div>Next</div>
+      <div class="p-1">Next</div>
     <% end %>
-  </div> --%>
+  </div>
 </div>
 
 <.modal :if={@live_action in [:new, :edit]} id="product-modal" show on_cancel={JS.patch(~p"/")}>
